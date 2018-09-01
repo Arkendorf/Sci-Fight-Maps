@@ -39,7 +39,9 @@ love.draw = function(dt)
                          "R and T: Change selected tile/prop\n"..
                          "Ctrl: Toggle prop mode\n"..
                          "G: Toggle grid\n"..
+                         "H: Only show current z level\n"..
                          "Enter: Save map to love2d default directory\n"..
+                         "N: New map\n"..
                          "?: Toggle control help", 0, 60)
   end
 end

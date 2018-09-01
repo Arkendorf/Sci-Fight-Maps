@@ -3,6 +3,7 @@ local map = {}
 map.pos = {x = 0, y = 0}
 
 map.lattice = true
+map.only_z = false
 
 map.wall_block = function(x, y, z)
   for i = z, 1, -1 do
@@ -81,6 +82,8 @@ map.load = function()
   prop_info.timerods = {l = 2, w = 2, h = 3, img = "timerods", shadow = true}
   prop_info.railingright = {l = 1, w = 1, h = 1, img = "railingright"}
   prop_info.railingleft = {l = 1, w = 1, h = 1, img = "railingleft"}
+  prop_info.bridge = {l = 5, w = 1, h = 1, img = "bridge", shadow = true}
+  prop_info.cap = {l = 1, w = 3, h = 3, img = "cap", shadow = true}
 
   prop_names = {}
   for k, v in pairs(prop_info) do

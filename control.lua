@@ -41,10 +41,11 @@ control.update = function(dt)
     if love.mouse.isDown(2) then
       for i, v in ipairs(props) do
         if game.cube_collide({x = v.x, y = v.y, z = v.z, l = prop_info[v.type].l, w = prop_info[v.type].w, h = prop_info[v.type].h}, {x = control.target.x, y = control.target.y, z = control.target.z, l = 1, w = 1, h = 1}) then
-          props[i] = nil
-          map.draw()
+          table.remove(props, i)
+          break
         end
       end
+      map.draw()
     end
   else
     if love.mouse.isDown(1) then
@@ -139,8 +140,14 @@ control.keypressed = function(key)
     control.target.y = control.target.y - 1
   elseif key == "lshift" and control.target.z < #grid then
     control.target.z = control.target.z + 1
+    if map.only_z then
+      map.draw()
+    end
   elseif key == "space" and control.target.z > 1 then
     control.target.z = control.target.z - 1
+    if map.only_z then
+      map.draw()
+    end
 
   elseif key == "t" then
     if control.prop_mode then
@@ -170,8 +177,17 @@ control.keypressed = function(key)
   elseif key == "lctrl" then
     control.prop_mode = not control.prop_mode
 
+  elseif key == "h" then
+    map.only_z = not map.only_z
+    map.draw()
+
   elseif key == "/" then
     control.help = not control.help
+
+  elseif key == "n" then
+    grid = {{{0}}}
+    props = {}
+    map.draw()
 
   elseif key == "return" then
     control.save()
@@ -236,6 +252,8 @@ end
 
 control.save = function()
   local str = "return "..tabletostring(grid)..", "..tabletostring(props)
+  map.only_z = false
+  map.draw()
   local icon = map.draw_icon()
   local name = tostring(os.time())
   love.filesystem.write(name..".txt", str)

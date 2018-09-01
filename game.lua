@@ -1,7 +1,7 @@
 local game = {}
 
 game.draw_tiles = function(x, y, z, tile)
-  if tile > 0 then
+  if tile > 0 and (not map.only_z or z == control.target.z) then
     -- floor
     if not map.floor_block(x, y, z) then
       graphics.draw_floor(x, y, z, tile)
@@ -15,15 +15,15 @@ game.draw_tiles = function(x, y, z, tile)
 end
 
 game.draw_lattice = function(x, y, z)
-  if z == 1 then
-    love.graphics.setColor(0, 1, 0)
-    love.graphics.rectangle("line", (x-1)*tile_size, (y+z-2)*tile_size, tile_size, tile_size)
-  end
-  if y == #grid[1] then
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("line", (x-1)*tile_size, (y+z-1)*tile_size, tile_size, tile_size)
-  end
-  love.graphics.setColor(1, 1, 1)
+    if z == 1 or (map.only_z and z == control.target.z) then
+      love.graphics.setColor(0, 1, 0)
+      love.graphics.rectangle("line", (x-1)*tile_size, (y+z-2)*tile_size, tile_size, tile_size)
+    end
+    if y == #grid[1] and (not map.only_z or z == control.target.z) then
+      love.graphics.setColor(1, 0, 0)
+      love.graphics.rectangle("line", (x-1)*tile_size, (y+z-1)*tile_size, tile_size, tile_size)
+    end
+    love.graphics.setColor(1, 1, 1)
 end
 
 game.draw_layer_mask = function(x, y, z, tile)
@@ -46,14 +46,16 @@ game.draw_props = function(shade, mask, shadow)
     shader[shade]:send("offset", {0, 0})
   end
   for i, v in ipairs(props) do
-    if not shadow or prop_info[v.type].shadow then
-      if mask then
-        shader[shade]:send("w", prop_info[v.type].w)
-        shader[shade]:send("coords", {v.x, v.y, v.z})
+    if not map.only_z or (control.target.z >= v.z and control.target.z < v.z+prop_info[v.type].h) then
+      if not shadow or prop_info[v.type].shadow then
+        if mask then
+          shader[shade]:send("w", prop_info[v.type].w)
+          shader[shade]:send("coords", {v.x, v.y, v.z})
+        end
+        love.graphics.setShader(shader[shade])
+        love.graphics.draw(prop_img[prop_info[v.type].img], (v.x-1)*tile_size, (v.y+v.z-2)*tile_size)
+        love.graphics.setShader()
       end
-      love.graphics.setShader(shader[shade])
-      love.graphics.draw(prop_img[prop_info[v.type].img], (v.x-1)*tile_size, (v.y+v.z-2)*tile_size)
-      love.graphics.setShader()
     end
   end
 end
