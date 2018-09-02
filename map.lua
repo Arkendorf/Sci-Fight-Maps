@@ -90,6 +90,10 @@ map.load = function()
   prop_info.bridge = {l = 5, w = 1, h = 1, img = "bridge", shadow = true}
   prop_info.cap = {l = 1, w = 3, h = 3, img = "cap", shadow = true}
   prop_info.platform = {l = 2, w = 3, h = 1, img = "platform", shadow = true}
+  prop_info.post = {l = 2, w = 2, h = 1, img = "post", shadow = true}
+  prop_info.throne = {l = 1, w = 1, h = 1, img = "throne", shadow = true}
+  prop_info.window = {l = 5, w = 1, h = 5, img = "window"}
+
 
   prop_names = {}
   for k, v in pairs(prop_info) do
