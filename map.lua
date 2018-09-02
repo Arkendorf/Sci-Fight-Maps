@@ -15,6 +15,9 @@ map.wall_block = function(x, y, z)
 end
 
 map.floor_block = function(x, y, z)
+  if map.only_z then
+    return false
+  end
   if z > 1 then
     for i = z-1, 1, -1 do
       if (y+(z-i) <= #grid[1] and grid[i][y+(z-i)][x] > 0) or (y+(z-i)-1 <= #grid[1] and grid[i][y+(z-i)-1][x] > 0) then
@@ -80,10 +83,13 @@ map.load = function()
   prop_info.console = {l = 4, w = 4, h = 1, img = "console", shadow = true}
   prop_info.runetop = {l = 4, w = 4, h = 1, img = "runetop", shadow = true}
   prop_info.timerods = {l = 2, w = 2, h = 3, img = "timerods", shadow = true}
+  prop_info.railing = {l = 1, w = 1, h = 1, img = "railing"}
+  prop_info.railingup = {l = 1, w = 1, h = 1, img = "railingup"}
   prop_info.railingright = {l = 1, w = 1, h = 1, img = "railingright"}
   prop_info.railingleft = {l = 1, w = 1, h = 1, img = "railingleft"}
   prop_info.bridge = {l = 5, w = 1, h = 1, img = "bridge", shadow = true}
   prop_info.cap = {l = 1, w = 3, h = 3, img = "cap", shadow = true}
+  prop_info.platform = {l = 2, w = 3, h = 1, img = "platform", shadow = true}
 
   prop_names = {}
   for k, v in pairs(prop_info) do
@@ -109,7 +115,7 @@ map.canvas_setup = function()
 end
 
 map.draw = function(num)
-  table.sort(props, function(a, b) return a.z > b.z end)
+  table.sort(props, function(a, b) return a.y+a.z < b.y+b.z end)
   -- draw layer mask
   love.graphics.setCanvas(layer_mask)
   love.graphics.clear()

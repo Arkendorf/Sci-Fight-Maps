@@ -121,7 +121,7 @@ shader.prop_layer = love.graphics.newShader[[
             }
           }
           else{
-            if(mask_pixel.g < 1.005-0.010*(coords.y+w)){
+            if(mask_pixel.g < 1.005-0.010*(coords.y+w-1)){
               return vec4(0, 0, 0, 0);
             }
           }
@@ -144,8 +144,15 @@ shader.prop_layer = love.graphics.newShader[[
           vec2 adjusted_coords = vec2(screen_coords.x-offset.x, screen_coords.y-offset.y);
           if(adjusted_coords.x >= 0.0 && adjusted_coords.x <= mask_size.x && adjusted_coords.y >= 0.0 && adjusted_coords.y <= mask_size.y){
             vec4 mask_pixel = Texel(mask, vec2(adjusted_coords.x/mask_size.x, adjusted_coords.y/mask_size.y));
-            if((mask_pixel.b <= 1.014-0.010*coords.z)){
-              return color;
+            if(adjusted_coords.y/tile_size-coords.y-coords.z+2<w){
+              if((mask_pixel.b <= 1.014-0.010*coords.z) && mask_pixel.b > 0.0){
+                return color;
+              }
+            }
+            else{
+              if(mask_pixel.g >= 1.005-0.010*(coords.y+w-1)){
+                return color;
+              }
             }
           }
         }

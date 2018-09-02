@@ -27,7 +27,7 @@ game.draw_lattice = function(x, y, z)
 end
 
 game.draw_layer_mask = function(x, y, z, tile)
-  if tile > 0 then
+  if tile > 0 and (not map.only_z or z == control.target.z) then
     love.graphics.setColor(0, 1.01 - 0.01*y, 1.01 - 0.01*z)
     if not map.floor_block(x, y, z) then
       love.graphics.rectangle("fill", (x-1)*tile_size, (y+z-2)*tile_size, tile_size, tile_size)
