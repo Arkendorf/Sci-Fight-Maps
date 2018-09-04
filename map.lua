@@ -93,6 +93,8 @@ map.load = function()
   prop_info.post = {l = 2, w = 2, h = 1, img = "post", shadow = true}
   prop_info.throne = {l = 1, w = 1, h = 1, img = "throne", shadow = true}
   prop_info.window = {l = 5, w = 1, h = 5, img = "window"}
+  prop_info.gate = {l = 5, w = 1, h = 5, img = "gate", shadow = true}
+  prop_info.pillar = {l = 2, w = 2, h = 5, img = "pillar", shadow = true}
 
 
   prop_names = {}
